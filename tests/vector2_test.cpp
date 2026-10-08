@@ -1,10 +1,6 @@
-#include <random>
-
 #include "doctest.h"
+#include "utils.hpp"
 #include <engine/vector.hpp>
-
-std::mt19937 rng(std::random_device{}());
-std::uniform_real_distribution<float> rand_float(0, 1000);
 
 TEST_CASE("Vector Magnitude") {
     engine::Vector2<float> v{3.0f, 4.0f};
