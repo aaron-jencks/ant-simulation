@@ -1,7 +1,51 @@
+#include <cstddef>
+#include <cstdint>
+#include <span>
+#include <stdexcept>
+#include <vector>
+
 #include <engine/images/parsing/bitstream.hpp>
+
 #include "doctest.h"
 #include "utils.hpp"
 
+#define GENERATE_BYTE_MASK(b, n) (static_cast<std::uint32_t>(b) << (n << 3))
+
+std::vector<std::uint8_t> generate_random_data(std::size_t len) {
+    auto data = std::vector<std::uint8_t>(len);
+    for(auto& byte : data)
+        byte = static_cast<std::uint8_t>(rand_byte(rng));
+    return data;
+}
+
 TEST_CASE("Verify Bounds Checking") {
-    auto sample_reader = BitStream()
+    auto data = generate_random_data(100);
+    auto sample_reader = engine::images::parsing::BitStream(
+        data
+    );
+    std::uint32_t sample = sample_reader.readBits(8);
+    REQUIRE_EQ(sample, data[0]);
+    REQUIRE_THROWS_AS(sample_reader.readBits(33), const std::invalid_argument&);
+    for(std::size_t i = 1; i < 97; i++) {
+        REQUIRE_EQ(sample_reader.readBits(8), data[i]);
+    }
+    REQUIRE_THROWS_AS(sample_reader.readBits(32), const std::runtime_error&);
+}
+
+TEST_CASE("Verify Data Integrity") {
+    auto data = generate_random_data(100);
+    auto sample_reader = engine::images::parsing::BitStream(
+        data
+    );
+    std::uint32_t sample = sample_reader.readBits(8);
+    REQUIRE_EQ(sample, data[0]);
+    sample = sample_reader.readBits(16);
+    std::uint32_t expected = GENERATE_BYTE_MASK(data[2], 1) + data[1];
+    REQUIRE_EQ(sample, expected);
+    expected = GENERATE_BYTE_MASK(data[5], 2) + GENERATE_BYTE_MASK(data[4], 1) + data[3];
+    sample = sample_reader.readBits(24);
+    REQUIRE_EQ(sample, expected);
+    sample = sample_reader.readBits(32);
+    expected = GENERATE_BYTE_MASK(data[9], 3) + GENERATE_BYTE_MASK(data[8], 2) + GENERATE_BYTE_MASK(data[7], 1) + data[6];
+    REQUIRE_EQ(sample, expected);
 }

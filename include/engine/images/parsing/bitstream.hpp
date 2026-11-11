@@ -18,7 +18,7 @@ namespace engine::images::parsing {
         std::span<const std::uint8_t> data_;
         std::size_t bytePos_ = 0;
         std::size_t bitPos_ = 0;
-    }
+    };
 }
 
 #endif

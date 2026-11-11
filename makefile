@@ -9,9 +9,9 @@ LDLIBS = -lglfw -lGL -lGLU -lm
 OUT = ant_sim
 TEST_OUT = build/tests/test_runner
 
-CPP_SOURCES := $(shell find src -type f -name '*.cpp')
-C_SOURCES := $(shell find src -type f -name '*.c')
-TEST_SOURCES := $(shell find tests -type f -name '*.cpp')
+CPP_SOURCES := $(shell find src -type f -path '*.cpp')
+C_SOURCES := $(shell find src -type f -path '*.c')
+TEST_SOURCES := $(shell find tests -type f -path '*.cpp')
 
 OBJECTS := $(patsubst src/%,build/%.o,$(CPP_SOURCES) $(C_SOURCES))
 TEST_OBJECTS := $(patsubst tests/%,build/tests/%.o,$(TEST_SOURCES))
