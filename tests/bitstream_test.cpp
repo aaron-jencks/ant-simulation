@@ -49,3 +49,7 @@ TEST_CASE("Verify Data Integrity") {
     expected = GENERATE_BYTE_MASK(data[9], 3) + GENERATE_BYTE_MASK(data[8], 2) + GENERATE_BYTE_MASK(data[7], 1) + data[6];
     REQUIRE_EQ(sample, expected);
 }
+
+TEST_CASE("Real-world data") {
+    // TODO use the new load_file_bytes from utils.cpp for this
+}
