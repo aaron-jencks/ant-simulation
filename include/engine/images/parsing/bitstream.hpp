@@ -12,6 +12,8 @@ namespace engine::images::parsing {
 
         std::uint32_t readBits(std::size_t count);
         std::uint8_t readByte();
+        std::uint32_t readLong();
+        
         void alignToBytes();
         void reset();
 

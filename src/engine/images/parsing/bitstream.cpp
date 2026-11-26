@@ -28,6 +28,10 @@ namespace engine::images::parsing {
         return static_cast<std::uint8_t>(readBits(8));
     }
 
+    std::uint32_t BitStream::readLong() {
+        return readBits(32);
+    }
+
     void BitStream::alignToBytes() {
         if(bitPos_ != 0) {
             bitPos_ = 0;
