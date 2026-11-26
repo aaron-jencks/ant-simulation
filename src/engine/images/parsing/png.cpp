@@ -1,0 +1,35 @@
+#include <engine/images/parsing/png.hpp>
+
+#include <cstdint>
+#include <vector>
+
+namespace engine::images::parsing {
+    bool check_file_header(BitStream& stream) {
+        auto magic_data = std::vector<std::uint8_t>({
+            0x89,               // First byte is always 0x89
+            0x50, 0x4e, 0x47,   // ASCII characters "PNG"
+            0x0d, 0x0a,         // DOS-style line ending
+            0x1a,               // Something to stop the printing in DOS
+            0x0a                // UNIX-style line ending
+        });
+
+        for(auto byte : magic_data) {
+            if(stream.readByte() != byte) return false;
+        }
+        return true;
+    }
+
+    PNGChunk read_file_chunk(BitStream& stream) {
+        std::uint32_t data_len = stream.readLong();
+        std::uint32_t data_type = stream.readLong();
+        auto data_buff = std::vector<std::uint8_t>(data_len);
+        for(std::size_t i = 0; i < data_len; i++) {
+            data_buff[i] = stream.readByte();
+        }
+        std::uint32_t crc = stream.readLong();
+        return PNGChunk(
+            data_len, data_type, crc,
+            data_buff
+        );
+    }
+}
