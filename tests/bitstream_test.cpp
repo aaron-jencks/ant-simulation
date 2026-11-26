@@ -59,7 +59,6 @@ inline void assertBytesEq(engine::images::parsing::BitStream stream, std::vector
 }
 
 TEST_CASE("Real-world data") {
-    // TODO use the new load_file_bytes from utils.cpp for this
     auto file_data = load_file_bytes("tests/assets/sample-png.png");
     auto sample_reader = engine::images::parsing::BitStream(file_data);
     assertBytesEq(
