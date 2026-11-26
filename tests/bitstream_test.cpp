@@ -25,6 +25,20 @@ TEST_CASE("Verify Bounds Checking") {
     REQUIRE_THROWS_AS(sample_reader.readBits(32), const std::runtime_error&);
 }
 
+TEST_CASE("Verify Bit Count Calculation") {
+    auto data = generate_random_data(100);
+    auto sample_reader = engine::images::parsing::BitStream(
+        data
+    );
+    REQUIRE_EQ(sample_reader.length(), 800);
+    sample_reader.readBits(8);
+    REQUIRE_EQ(sample_reader.length(), 792);
+    sample_reader.readBits(1);
+    REQUIRE_EQ(sample_reader.length(), 791);
+    sample_reader.readBits(2);
+    REQUIRE_EQ(sample_reader.length(), 789);
+}
+
 TEST_CASE("Verify Data Integrity") {
     auto data = generate_random_data(100);
     auto sample_reader = engine::images::parsing::BitStream(

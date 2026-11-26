@@ -38,4 +38,10 @@ namespace engine::images::parsing {
             bytePos_++;
         }
     }
+
+    std::size_t BitStream::length() {
+        std::size_t current_position = bytePos_ * 8 + bitPos_;
+        std::size_t total_bit_count = data_.size() * 8;
+        return total_bit_count - current_position;
+    }
 }

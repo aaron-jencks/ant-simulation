@@ -16,6 +16,7 @@ namespace engine::images::parsing {
         
         void alignToBytes();
         void reset();
+        std::size_t length();
 
     private:
         std::span<const std::uint8_t> data_;
