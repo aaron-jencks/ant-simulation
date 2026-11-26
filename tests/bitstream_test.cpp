@@ -64,11 +64,11 @@ TEST_CASE("Real-world data") {
     assertBytesEq(
         sample_reader,
         std::vector<std::uint8_t>({
-            0x89,
-            0x50, 0x4e, 0x47,
-            0x0d, 0x0a,
-            0x1a,
-            0x0a
+            0x89,               // First byte is always 0x89
+            0x50, 0x4e, 0x47,   // Followed by the 3 bytes "PNG"
+            0x0d, 0x0a,         // DOS style line ending
+            0x1a,               // Something to stop the display of the file in DOS
+            0x0a                // UNIX style line ending
         })
     );
 }
