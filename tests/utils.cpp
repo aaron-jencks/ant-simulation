@@ -27,3 +27,10 @@ std::vector<std::uint8_t> load_file_bytes(const std::string& filename) {
 
     return data;
 }
+
+std::vector<std::uint8_t> generate_random_data(std::size_t len) {
+    auto data = std::vector<std::uint8_t>(len);
+    for(auto& byte : data)
+        byte = static_cast<std::uint8_t>(rand_byte(rng));
+    return data;
+}

@@ -11,13 +11,6 @@
 
 #define GENERATE_BYTE_MASK(b, n) (static_cast<std::uint32_t>(b) << (n << 3))
 
-std::vector<std::uint8_t> generate_random_data(std::size_t len) {
-    auto data = std::vector<std::uint8_t>(len);
-    for(auto& byte : data)
-        byte = static_cast<std::uint8_t>(rand_byte(rng));
-    return data;
-}
-
 TEST_CASE("Verify Bounds Checking") {
     auto data = generate_random_data(100);
     auto sample_reader = engine::images::parsing::BitStream(
