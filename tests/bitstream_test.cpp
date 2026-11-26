@@ -50,6 +50,26 @@ TEST_CASE("Verify Data Integrity") {
     REQUIRE_EQ(sample, expected);
 }
 
+inline void assertBytesEq(engine::images::parsing::BitStream stream, std::vector<std::uint8_t> expected) {
+    std::uint8_t temp;
+    for(auto expected : expected) {
+        temp = stream.readByte();
+        REQUIRE_EQ(temp, expected);
+    }
+}
+
 TEST_CASE("Real-world data") {
     // TODO use the new load_file_bytes from utils.cpp for this
+    auto file_data = load_file_bytes("tests/assets/sample-png.png");
+    auto sample_reader = engine::images::parsing::BitStream(file_data);
+    assertBytesEq(
+        sample_reader,
+        std::vector<std::uint8_t>({
+            0x89,
+            0x50, 0x4e, 0x47,
+            0x0d, 0x0a,
+            0x1a,
+            0x0a
+        })
+    );
 }

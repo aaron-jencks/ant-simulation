@@ -11,6 +11,7 @@ namespace engine::images::parsing {
         explicit BitStream(std::span<const std::uint8_t> data) : data_(data) {}
 
         std::uint32_t readBits(std::size_t count);
+        std::uint8_t readByte();
         void alignToBytes();
         void reset();
 

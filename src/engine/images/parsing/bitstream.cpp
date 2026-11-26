@@ -24,6 +24,10 @@ namespace engine::images::parsing {
         return result;
     }
 
+    std::uint8_t BitStream::readByte() {
+        return static_cast<std::uint8_t>(readBits(8));
+    }
+
     void BitStream::alignToBytes() {
         if(bitPos_ != 0) {
             bitPos_ = 0;
