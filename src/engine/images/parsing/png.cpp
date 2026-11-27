@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <vector>
 
+#include <engine/utils/crc32.hpp>
+
 namespace engine::images::parsing {
     bool check_file_header(BitStream& stream) {
         if(stream.length() < 64) return false;
@@ -34,5 +36,11 @@ namespace engine::images::parsing {
             data_len, data_type, crc,
             std::move(data_buff)
         );
+    }
+
+    bool PNGChunk::verify_crc() {
+        if(data.size() != length) return false;
+        std::uint32_t computed_crc = engine::utils::compute_crc32(data);
+        return computed_crc == crc;
     }
 }

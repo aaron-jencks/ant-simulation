@@ -12,6 +12,8 @@ namespace engine::images::parsing {
         std::uint32_t type;
         std::uint32_t crc;
         std::vector<std::uint8_t> data;
+
+        bool verify_crc();
     };
 
     /**
