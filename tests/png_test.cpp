@@ -95,6 +95,7 @@ TEST_CASE("Verify CRC") {
         std::span<std::uint8_t>(first_data_element, first_data_element + length) 
     );
     CHECK_NE(computed_crc, crc);
+    CHECK_FALSE(chunk.verify_crc());
     inject_data(test_data, length + 8, computed_crc);
     test_reader.reset();
     chunk = read_file_chunk(test_reader);
