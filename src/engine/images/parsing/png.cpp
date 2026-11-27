@@ -1,7 +1,6 @@
 #include <engine/images/parsing/png.hpp>
 
 #include <cstdint>
-#include <utility>
 #include <vector>
 
 namespace engine::images::parsing {
