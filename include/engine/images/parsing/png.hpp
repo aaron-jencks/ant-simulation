@@ -2,7 +2,7 @@
 #define PNG_H
 
 #include <cstdint>
-#include <span>
+#include <vector>
 
 #include <engine/images/parsing/bitstream.hpp>
 
@@ -11,7 +11,7 @@ namespace engine::images::parsing {
         std::uint32_t length;
         std::uint32_t type;
         std::uint32_t crc;
-        std::span<std::uint8_t> data;
+        std::vector<std::uint8_t> data;
     };
 
     /**

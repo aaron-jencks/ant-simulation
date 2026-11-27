@@ -1,10 +1,13 @@
 #include <engine/images/parsing/png.hpp>
 
 #include <cstdint>
+#include <utility>
 #include <vector>
 
 namespace engine::images::parsing {
     bool check_file_header(BitStream& stream) {
+        if(stream.length() < 64) return false;
+
         auto magic_data = std::vector<std::uint8_t>({
             0x89,               // First byte is always 0x89
             0x50, 0x4e, 0x47,   // ASCII characters "PNG"
@@ -16,6 +19,7 @@ namespace engine::images::parsing {
         for(auto byte : magic_data) {
             if(stream.readByte() != byte) return false;
         }
+
         return true;
     }
 
@@ -29,7 +33,7 @@ namespace engine::images::parsing {
         std::uint32_t crc = stream.readLong();
         return PNGChunk(
             data_len, data_type, crc,
-            data_buff
+            std::move(data_buff)
         );
     }
 }
