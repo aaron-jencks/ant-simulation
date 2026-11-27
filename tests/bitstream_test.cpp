@@ -57,6 +57,15 @@ TEST_CASE("Verify Data Integrity") {
     REQUIRE_EQ(sample, expected);
 }
 
+TEST_CASE("Verify Big-Endianness") {
+    std::uint32_t target = 0xdeadbeef;
+    auto test_data = std::vector<std::uint8_t>({
+        0xde, 0xad, 0xbe, 0xef
+    });
+    auto test_reader = engine::images::parsing::BitStream(test_data);
+    REQUIRE_EQ(target, test_reader.readLong());
+}
+
 inline void assertBytesEq(engine::images::parsing::BitStream stream, std::vector<std::uint8_t> expected) {
     std::uint8_t temp;
     for(auto expected : expected) {

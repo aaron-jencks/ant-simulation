@@ -2,7 +2,7 @@ CC = gcc
 CXX = g++
 
 CPPFLAGS = -Iinclude
-CXXFLAGS = -g -std=c++20 -Wall -MMD -MP
+CXXFLAGS = -g -std=c++23 -Wall -MMD -MP
 CFLAGS = -g -Wall -MMD -MP
 LDLIBS = -lglfw -lGL -lGLU -lm
 

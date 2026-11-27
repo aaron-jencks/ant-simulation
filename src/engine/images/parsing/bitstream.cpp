@@ -1,5 +1,6 @@
 #include <engine/images/parsing/bitstream.hpp>
 
+#include <bit>
 #include <stdexcept>
 
 
@@ -29,7 +30,8 @@ namespace engine::images::parsing {
     }
 
     std::uint32_t BitStream::readLong() {
-        return readBits(32);
+        auto be_data = readBits(32);
+        return std::byteswap(be_data);
     }
 
     void BitStream::alignToBytes() {
