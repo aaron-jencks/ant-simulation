@@ -11,6 +11,8 @@
 
 #define GENERATE_BYTE_MASK(b, n) (static_cast<std::uint32_t>(b) << (n << 3))
 
+TEST_SUITE_BEGIN("BitStream");
+
 TEST_CASE("Verify Bounds Checking") {
     auto data = generate_random_data(100);
     auto sample_reader = engine::images::parsing::BitStream(
@@ -30,13 +32,13 @@ TEST_CASE("Verify Bit Count Calculation") {
     auto sample_reader = engine::images::parsing::BitStream(
         data
     );
-    REQUIRE_EQ(sample_reader.length(), 800);
+    REQUIRE_EQ(sample_reader.length(), 800u);
     sample_reader.readBits(8);
-    REQUIRE_EQ(sample_reader.length(), 792);
+    REQUIRE_EQ(sample_reader.length(), 792u);
     sample_reader.readBits(1);
-    REQUIRE_EQ(sample_reader.length(), 791);
+    REQUIRE_EQ(sample_reader.length(), 791u);
     sample_reader.readBits(2);
-    REQUIRE_EQ(sample_reader.length(), 789);
+    REQUIRE_EQ(sample_reader.length(), 789u);
 }
 
 TEST_CASE("Verify Data Integrity") {
@@ -88,3 +90,5 @@ TEST_CASE("Real-world data") {
         })
     );
 }
+
+TEST_SUITE_END();

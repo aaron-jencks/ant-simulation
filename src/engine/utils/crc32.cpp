@@ -18,14 +18,17 @@ namespace engine::utils {
         CRC32_TABLE_INIT = true;
     }
 
-    std::uint32_t compute_crc32(std::span<std::uint8_t> data) {
-        std::uint32_t crc32 = 0xffffffff;
+    std::uint32_t update_crc32(std::span<std::uint8_t> data, std::uint32_t state = 0xffffffff) {
         if(!CRC32_TABLE_INIT) init_crc32();
         for(std::size_t i = 0; i < data.size(); i++) {
-            crc32 ^= data[i];
-            crc32 = (crc32 >> 8) ^ CRC32_LOOKUP[crc32 & 0xff];
+            state ^= data[i];
+            state = (state >> 8) ^ CRC32_LOOKUP[state & 0xff];
         }
-        crc32 ^= 0xffffffff;
-        return crc32;
+        return state;
+    }
+
+    std::uint32_t compute_crc32(std::span<std::uint8_t> data, std::uint32_t state = 0xffffffff) {
+        std::uint32_t crc32 = update_crc32(data, state);
+        return crc32 ^ 0xffffffff;
     }
 }

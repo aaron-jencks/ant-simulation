@@ -40,7 +40,14 @@ namespace engine::images::parsing {
 
     bool PNGChunk::verify_crc() {
         if(data.size() != length) return false;
-        std::uint32_t computed_crc = engine::utils::compute_crc32(data);
+        auto type_arr = std::vector<std::uint8_t>({
+            static_cast<std::uint8_t>(type >> 24),
+            static_cast<std::uint8_t>(type >> 16),
+            static_cast<std::uint8_t>(type >> 8),
+            static_cast<std::uint8_t>(type)
+        });
+        std::uint32_t computed_crc = engine::utils::update_crc32(type_arr);
+        computed_crc = engine::utils::compute_crc32(data, computed_crc);
         return computed_crc == crc;
     }
 }

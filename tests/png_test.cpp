@@ -15,6 +15,8 @@ inline engine::images::parsing::BitStream create_bitstream_from_vector(std::vect
     return engine::images::parsing::BitStream(data);
 }
 
+TEST_SUITE_BEGIN("PNG Utilities");
+
 TEST_CASE("Check Header Contents") {
     SUBCASE("Valid Header") {
         auto test_data = std::vector<std::uint8_t>({
@@ -90,9 +92,17 @@ TEST_CASE("Verify CRC") {
     inject_data(test_data, 4, data_type);
     inject_data(test_data, length + 8, crc);
     auto chunk = read_file_chunk(test_reader);
+    auto type_arr = std::vector<std::uint8_t>({
+        static_cast<std::uint8_t>(data_type >> 24),
+        static_cast<std::uint8_t>(data_type >> 16),
+        static_cast<std::uint8_t>(data_type >> 8),
+        static_cast<std::uint8_t>(data_type)
+    });
+    std::uint32_t computed_crc = engine::utils::update_crc32(type_arr);
     auto first_data_element = test_data.begin() + 8;
-    std::uint32_t computed_crc = engine::utils::compute_crc32(
-        std::span<std::uint8_t>(first_data_element, first_data_element + length) 
+    computed_crc = engine::utils::compute_crc32(
+        std::span<std::uint8_t>(first_data_element, first_data_element + length),
+        computed_crc
     );
     CHECK_NE(computed_crc, crc);
     CHECK_FALSE(chunk.verify_crc());
@@ -101,3 +111,13 @@ TEST_CASE("Verify CRC") {
     chunk = read_file_chunk(test_reader);
     REQUIRE(chunk.verify_crc());
 }
+
+TEST_CASE("Real-world data") {
+    auto file_data = load_file_bytes("tests/assets/sample-png.png");
+    auto sample_reader = engine::images::parsing::BitStream(file_data);
+    REQUIRE(engine::images::parsing::check_file_header(sample_reader));
+    auto chunk = engine::images::parsing::read_file_chunk(sample_reader);
+    REQUIRE(chunk.verify_crc());
+}
+
+TEST_SUITE_END();
